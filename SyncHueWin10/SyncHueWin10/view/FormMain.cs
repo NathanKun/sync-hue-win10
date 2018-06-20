@@ -1,12 +1,6 @@
 ﻿using SyncHueWin10.util;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Timers;
@@ -25,9 +19,14 @@ namespace SyncHueWin10.view
         public FormMain()
         {
             InitializeComponent();
-            
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            labelHint.Text = "Initializing";
+
             // init hueUtil
-            hueUtil.Init();
+            hueUtil.Init(labelHint);
 
             // init audio
             Thread t = new Thread(() =>
@@ -52,18 +51,14 @@ namespace SyncHueWin10.view
             t.Start();
 
             // init timers
-            timerPeak.Elapsed += timer_GetPeakValue;
+            timerPeak.Elapsed += Timer_GetPeakValue;
             timerPeak.Start();
-            timerGC.Elapsed += timer_TrigerGC;
+            timerGC.Elapsed += Timer_TrigerGC;
             timerGC.Start();
 
         }
 
-        private void FormMain_Load(object sender, EventArgs e)
-        {
-        }
-
-        private void timer_GetPeakValue(object sender, ElapsedEventArgs e)
+        private void Timer_GetPeakValue(object sender, ElapsedEventArgs e)
         {
             if (audioSessionControl2 != null)
             {
@@ -72,7 +67,7 @@ namespace SyncHueWin10.view
                 SetBrightness(peakValue);
             }
         }
-        private void timer_TrigerGC(object sender, ElapsedEventArgs e)
+        private void Timer_TrigerGC(object sender, ElapsedEventArgs e)
         {
             if (audioSessionControl2 != null)
             {
