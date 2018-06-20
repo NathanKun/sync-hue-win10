@@ -1,4 +1,4 @@
-﻿namespace SyncHueWin10
+﻿namespace SyncHueWin10.view
 {
     partial class FormMain
     {
@@ -28,21 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.radioButtonslayout = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
+            // 
+            // radioButtonslayout
+            // 
+            this.radioButtonslayout.Location = new System.Drawing.Point(10, 10);
+            this.radioButtonslayout.Name = "radioButtonslayout";
+            this.radioButtonslayout.Size = new System.Drawing.Size(280, 280);
+            this.radioButtonslayout.TabIndex = 0;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 253);
+            this.ClientSize = new System.Drawing.Size(300, 300);
+            this.Controls.Add(this.radioButtonslayout);
             this.Name = "FormMain";
             this.Text = "Sync Hue Win10";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.FlowLayoutPanel radioButtonslayout;
     }
 }
 
