@@ -63,7 +63,7 @@ namespace SyncHueWin10.view
             if (audioSessionControl2 != null)
             {
                 float peakValue = audioSessionControl2.QueryInterface<AudioMeterInformation>().GetPeakValue();
-                Console.WriteLine(audioSessionControl2.DisplayName + " : " + peakValue);
+                if(peakValue != 0) Console.WriteLine(audioSessionControl2.DisplayName + " : " + peakValue);
                 SetBrightness(peakValue);
             }
         }
@@ -79,8 +79,13 @@ namespace SyncHueWin10.view
         {
             if (hueUtil.isInit)
             {
-                hueUtil.SetBrightness(level, 100, 254);
+                hueUtil.SetBrightness(level, 0.5, 1);
             }
+        }
+        
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (hueUtil.isInit) hueUtil.Stop();
         }
     }
 }
