@@ -16,15 +16,20 @@ namespace SyncHueWin10.view
 {
     public partial class FormMain : Form
     {
-        System.Timers.Timer timerPeak = new System.Timers.Timer(1000 / 30);
-        System.Timers.Timer timerGC = new System.Timers.Timer(5000);
+        System.Timers.Timer timerPeak = new System.Timers.Timer(1000 / 50);
+        System.Timers.Timer timerGC = new System.Timers.Timer(1000 * 10);
         List<AudioApplication> aps;
         AudioSessionControl2 audioSessionControl2;
+        HueUtil hueUtil = new HueUtil();
 
         public FormMain()
         {
             InitializeComponent();
+            
+            // init hueUtil
+            hueUtil.Init();
 
+            // init audio
             Thread t = new Thread(() =>
             {
                 aps = AudioUtil.GetAudioApplications();
@@ -46,6 +51,7 @@ namespace SyncHueWin10.view
             t.SetApartmentState(ApartmentState.MTA);
             t.Start();
 
+            // init timers
             timerPeak.Elapsed += timer_GetPeakValue;
             timerPeak.Start();
             timerGC.Elapsed += timer_TrigerGC;
@@ -61,7 +67,9 @@ namespace SyncHueWin10.view
         {
             if (audioSessionControl2 != null)
             {
-                Console.WriteLine(audioSessionControl2.DisplayName + " : " + audioSessionControl2.QueryInterface<AudioMeterInformation>().GetPeakValue());
+                float peakValue = audioSessionControl2.QueryInterface<AudioMeterInformation>().GetPeakValue();
+                Console.WriteLine(audioSessionControl2.DisplayName + " : " + peakValue);
+                SetBrightness(peakValue);
             }
         }
         private void timer_TrigerGC(object sender, ElapsedEventArgs e)
@@ -69,6 +77,14 @@ namespace SyncHueWin10.view
             if (audioSessionControl2 != null)
             {
                 GC.Collect();
+            }
+        }
+
+        private void SetBrightness(float level)
+        {
+            if (hueUtil.isInit)
+            {
+                hueUtil.SetBrightness(level, 100, 254);
             }
         }
     }
