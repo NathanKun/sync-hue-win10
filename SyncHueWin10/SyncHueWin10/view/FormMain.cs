@@ -10,7 +10,7 @@ namespace SyncHueWin10.view
 {
     public partial class FormMain : Form
     {
-        System.Timers.Timer timerPeak = new System.Timers.Timer(1000 / 25);
+        System.Timers.Timer timerPeak = new System.Timers.Timer(1000 / 100);
         System.Timers.Timer timerGC = new System.Timers.Timer(1000 * 10);
         List<AudioApplication> aps;
         AudioSessionControl2 audioSessionControl2;
@@ -35,9 +35,11 @@ namespace SyncHueWin10.view
 
                 foreach (AudioApplication ap in aps)
                 {
-                    RadioButton rb = new RadioButton();
-                    rb.Text = ap.sessionName;
-                    rb.Width = 280;
+                    RadioButton rb = new RadioButton
+                    {
+                        Text = ap.sessionName,
+                        Width = 280
+                    };
                     rb.Click += (o, i) =>
                     {
                         (new Thread(() => audioSessionControl2 = AudioUtil.GetAudioSessionControlByPid(ap.pid))).Start();
@@ -61,7 +63,6 @@ namespace SyncHueWin10.view
             if (audioSessionControl2 != null)
             {
                 float peakValue = audioSessionControl2.QueryInterface<AudioMeterInformation>().GetPeakValue();
-                //if(peakValue != 0) Console.WriteLine(audioSessionControl2.DisplayName + " : " + peakValue);
                 SetBrightness(peakValue);
             }
         }

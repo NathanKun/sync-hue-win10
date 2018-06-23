@@ -16,7 +16,7 @@ namespace SyncHueWin10.util
         private StreamingHueClient client;
         private StreamingGroup entGroup;
         private int hue;
-        private const int HUE_STEP = 100;
+        private const int HUE_STEP = 50;
         public bool isInit = false;
 
         public HueUtil()
