@@ -12,6 +12,9 @@ namespace SyncHueWin10.util
 {
     class HueUtil
     {
+        private readonly string ip = "192.168.1.2";
+        private readonly string key = "jOksZcqOvV0MBddZakrML3NeSOyFRWAidZJzX426";
+        private readonly string entertainmentKey = "4BE35AA0237BB7592095999EE24BFDCC";
 
         private StreamingHueClient client;
         private StreamingGroup entGroup;

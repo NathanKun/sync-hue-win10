@@ -15,6 +15,8 @@ namespace SyncHueWin10.view
         List<AudioApplication> aps;
         AudioSessionControl2 audioSessionControl2;
         HueUtil hueUtil = new HueUtil();
+        double brightnessMin = 0;
+        double brightnessMax = 1;
 
         public FormMain()
         {
@@ -63,6 +65,7 @@ namespace SyncHueWin10.view
             if (audioSessionControl2 != null)
             {
                 float peakValue = audioSessionControl2.QueryInterface<AudioMeterInformation>().GetPeakValue();
+                if(peakValue != 0) Console.WriteLine(audioSessionControl2.DisplayName + " : " + peakValue);
                 SetBrightness(peakValue);
             }
         }
@@ -78,7 +81,7 @@ namespace SyncHueWin10.view
         {
             if (hueUtil.isInit)
             {
-                hueUtil.SetBrightness(level, 0.05, 1);
+                hueUtil.SetBrightness(level, brightnessMin, brightnessMax);
             }
         }
         
@@ -87,6 +90,16 @@ namespace SyncHueWin10.view
             audioSessionControl2 = null;
             if (hueUtil.isInit) hueUtil.Stop();
             Thread.Sleep(500);
+        }
+
+        private void buttonSetRange_Click(object sender, EventArgs e)
+        {
+            string strRange1;
+            string strRange2;
+
+            rangeSelectorControl1.QueryRange(out strRange1, out strRange2);
+            brightnessMin = double.Parse(strRange1) / 100;
+            brightnessMax = double.Parse(strRange2) / 100;
         }
     }
 }
