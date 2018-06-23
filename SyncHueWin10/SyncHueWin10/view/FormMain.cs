@@ -10,7 +10,7 @@ namespace SyncHueWin10.view
 {
     public partial class FormMain : Form
     {
-        System.Timers.Timer timerPeak = new System.Timers.Timer(1000 / 50);
+        System.Timers.Timer timerPeak = new System.Timers.Timer(1000 / 25);
         System.Timers.Timer timerGC = new System.Timers.Timer(1000 * 10);
         List<AudioApplication> aps;
         AudioSessionControl2 audioSessionControl2;
@@ -40,10 +40,8 @@ namespace SyncHueWin10.view
                     rb.Width = 280;
                     rb.Click += (o, i) =>
                     {
-                        Console.WriteLine(ap.sessionName + " on click");
                         (new Thread(() => audioSessionControl2 = AudioUtil.GetAudioSessionControlByPid(ap.pid))).Start();
                     };
-                    Console.WriteLine(ap.sessionName + " added");
                     this.Invoke(new Action(() => { radioButtonslayout.Controls.Add(rb); }));
                 }
             });
@@ -63,7 +61,7 @@ namespace SyncHueWin10.view
             if (audioSessionControl2 != null)
             {
                 float peakValue = audioSessionControl2.QueryInterface<AudioMeterInformation>().GetPeakValue();
-                if(peakValue != 0) Console.WriteLine(audioSessionControl2.DisplayName + " : " + peakValue);
+                //if(peakValue != 0) Console.WriteLine(audioSessionControl2.DisplayName + " : " + peakValue);
                 SetBrightness(peakValue);
             }
         }
@@ -79,13 +77,15 @@ namespace SyncHueWin10.view
         {
             if (hueUtil.isInit)
             {
-                hueUtil.SetBrightness(level, 0.5, 1);
+                hueUtil.SetBrightness(level, 0.05, 1);
             }
         }
         
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            audioSessionControl2 = null;
             if (hueUtil.isInit) hueUtil.Stop();
+            Thread.Sleep(500);
         }
     }
 }
