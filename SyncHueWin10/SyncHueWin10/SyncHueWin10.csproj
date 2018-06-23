@@ -136,7 +136,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="TestControl">
-      <HintPath>C:\我的资料库\Downloads\BinariesVer1.5\Binaries\TestControl.dll</HintPath>
+      <HintPath>util\TestControl.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

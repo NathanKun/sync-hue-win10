@@ -93,11 +93,11 @@ namespace SyncHueWin10.util
         /// <param name="level">from 0.0 to 1.0</param>
         /// <param name="min">minimum brightness, from 0.0 to 1.0<</param>
         /// <param name="max">maximum brightness, from 0.0 to 1.0<</param>
-        public void SetBrightness(double level, double min, double max)
+        public void SetBrightnessAndSaturation(double level, double min, double max, int saturation)
         {
             NextHue();
             double brightness = min + (max - min) * level;
-            entGroup.SetState(HueToRGB(hue, 255, 255), brightness, TimeSpan.FromMilliseconds(0));
+            entGroup.SetState(HueToRGB(hue, saturation, 255), brightness, TimeSpan.FromMilliseconds(100));
             //if (brightness != min) Console.WriteLine("set brightness : " + brightness);
         }
 

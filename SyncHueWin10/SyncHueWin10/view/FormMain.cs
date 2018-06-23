@@ -10,13 +10,14 @@ namespace SyncHueWin10.view
 {
     public partial class FormMain : Form
     {
-        System.Timers.Timer timerPeak = new System.Timers.Timer(1000 / 100);
+        System.Timers.Timer timerPeak = new System.Timers.Timer(1000 / 9);
         System.Timers.Timer timerGC = new System.Timers.Timer(1000 * 10);
         List<AudioApplication> aps;
         AudioSessionControl2 audioSessionControl2;
         HueUtil hueUtil = new HueUtil();
         double brightnessMin = 0;
         double brightnessMax = 1;
+        int saturationValue = 90;
 
         public FormMain()
         {
@@ -58,6 +59,19 @@ namespace SyncHueWin10.view
             timerGC.Elapsed += Timer_TrigerGC;
             timerGC.Start();
 
+            // trackbar saturation
+            trackBarSaturation.Minimum = 0;
+            trackBarSaturation.Maximum = 255;
+            trackBarSaturation.Value = saturationValue;
+            labelSaturation.Text = "Saturation: " + trackBarSaturation.Value;
+            trackBarSaturation.ValueChanged += OnTrackBarSaturationChanged;
+
+        }
+
+        private void OnTrackBarSaturationChanged(object sender, EventArgs e)
+        {
+            labelSaturation.Text = "Saturation: " + trackBarSaturation.Value;
+            saturationValue = trackBarSaturation.Value;
         }
 
         private void Timer_GetPeakValue(object sender, ElapsedEventArgs e)
@@ -81,7 +95,7 @@ namespace SyncHueWin10.view
         {
             if (hueUtil.isInit)
             {
-                hueUtil.SetBrightness(level, brightnessMin, brightnessMax);
+                hueUtil.SetBrightnessAndSaturation(level, brightnessMin, brightnessMax, saturationValue);
             }
         }
         
@@ -92,12 +106,9 @@ namespace SyncHueWin10.view
             Thread.Sleep(500);
         }
 
-        private void buttonSetRange_Click(object sender, EventArgs e)
+        private void ButtonSetRange_Click(object sender, EventArgs e)
         {
-            string strRange1;
-            string strRange2;
-
-            rangeSelectorControl1.QueryRange(out strRange1, out strRange2);
+            rangerBrightness.QueryRange(out string strRange1, out string strRange2);
             brightnessMin = double.Parse(strRange1) / 100;
             brightnessMax = double.Parse(strRange2) / 100;
         }
